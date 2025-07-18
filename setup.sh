@@ -19,9 +19,9 @@ done
 #Deps to build and install kernel module
 sudo apt-get install curl build-essential dkms pciutils -y
 
-curl -fsSLO https://storage.googleapis.com/deepperception_public/hailo/h10/hailo10h-driver-fw_5.0.0_all.deb
+curl -fsSLO https://storage.googleapis.com/deepperception_public/hailo/h10/hailort-pcie-driver_5.0.0_all.deb 
 
-yes | sudo dpkg -i hailo10h-driver-fw_5.0.0_all.deb
+yes | sudo dpkg -i hailort-pcie-driver_5.0.0_all.deb 
 
 #Install HailoRT
 
