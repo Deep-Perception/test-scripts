@@ -16,8 +16,10 @@ done
 
 #Install Hailo-10 Driver
 
+sudo apt update
+
 #Deps to build and install kernel module
-sudo apt-get install curl build-essential dkms pciutils -y
+sudo apt-get install curl build-essential dkms pciutils linux-headers-$(uname -r) -y
 
 curl -fsSLO https://storage.googleapis.com/deepperception_public/hailo/h10/hailort-pcie-driver_5.0.0_all.deb 
 
