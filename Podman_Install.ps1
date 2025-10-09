@@ -132,6 +132,14 @@ Write-Host "Initializing Podman machine..." -ForegroundColor Green
 Write-Host "Starting Podman machine..." -ForegroundColor Green
 & "C:\Program Files\RedHat\Podman\podman.exe" machine start
 
+Write-Host "Configuring Podman machine to start on boot..." -ForegroundColor Green
+$action = New-ScheduledTaskAction -Execute "C:\Program Files\RedHat\Podman\podman.exe" -Argument "machine start"
+$trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+$principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+Register-ScheduledTask -TaskName "Podman Machine Startup" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Force | Out-Null
+Write-Host "[OK] Podman machine configured to start automatically on boot" -ForegroundColor Green
+
 Write-Host ""
 Write-Host "=== Verifying Installation ===" -ForegroundColor Cyan
 Write-Host ""
