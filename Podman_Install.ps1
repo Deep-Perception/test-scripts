@@ -78,22 +78,12 @@ Write-Host "Updating WSL to latest version..." -ForegroundColor Green
 $wslUpdateOutput = wsl --update 2>&1 | Out-String
 Write-Host $wslUpdateOutput
 
-# Check if an update was actually applied
-$updateApplied = $false
-if ($wslUpdateOutput -match "Installing|Downloading|has been installed|Update successful") {
-    $updateApplied = $true
-}
-elseif ($wslUpdateOutput -match "No updates are available|already have the most recent version|up to date") {
-    $updateApplied = $false
+# Check if WSL was already up to date
+if ($wslUpdateOutput -match "The most recent version of Windows Subsystem for Linux is already installed") {
     Write-Host "[OK] WSL is already up to date" -ForegroundColor Green
 }
 else {
-    # If we can't determine, be safe and assume an update might have occurred
-    Write-Host "Unable to determine if WSL was updated. Checking version..." -ForegroundColor Yellow
-    # Could add additional version check logic here if needed
-}
-
-if ($updateApplied) {
+    # An update was applied
     Write-Host ""
     Write-Host "============================================" -ForegroundColor Red
     Write-Host "SYSTEM REBOOT REQUIRED" -ForegroundColor Red
@@ -104,6 +94,8 @@ if ($updateApplied) {
     Read-Host "Press Enter to exit"
     exit
 }
+
+Write-Host ""
 
 Write-Host ""
 
@@ -209,4 +201,5 @@ Write-Host "  podman run quay.io/podman/hello" -ForegroundColor Gray
 Write-Host ""
 Write-Host "Press any key to exit..." -ForegroundColor Cyan
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
 
