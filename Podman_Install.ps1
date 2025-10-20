@@ -75,29 +75,13 @@ Write-Host "Step 2: Configuring WSL..." -ForegroundColor Yellow
 
 # Update WSL to latest version
 Write-Host "Updating WSL to latest version..." -ForegroundColor Green
-$wslUpdateOutput = wsl --update 2>&1 | Out-String
-Write-Host $wslUpdateOutput
+wsl --update
+Write-Host "[OK] WSL updated" -ForegroundColor Green
 
-# Check if WSL was already up to date
-if ($wslUpdateOutput -match "The most recent version of Windows Subsystem for Linux is already installed") {
-    Write-Host "[OK] WSL is already up to date" -ForegroundColor Green
-}
-else {
-    # An update was applied
-    Write-Host ""
-    Write-Host "============================================" -ForegroundColor Red
-    Write-Host "SYSTEM REBOOT REQUIRED" -ForegroundColor Red
-    Write-Host "============================================" -ForegroundColor Red
-    Write-Host "WSL has been updated to a newer version." -ForegroundColor Yellow
-    Write-Host "Please restart your computer and run this script again." -ForegroundColor Yellow
-    Write-Host ""
-    Read-Host "Press Enter to exit"
-    exit
-}
-
-Write-Host ""
-
-Write-Host ""
+# Restart WSL service to avoid hangs
+Write-Host "Restarting WSL service..."
+wsl --shutdown
+Start-Sleep -Seconds 10
 
 # Set WSL 2 as default
 Write-Host "Setting WSL 2 as default version..." -ForegroundColor Green
@@ -201,5 +185,3 @@ Write-Host "  podman run quay.io/podman/hello" -ForegroundColor Gray
 Write-Host ""
 Write-Host "Press any key to exit..." -ForegroundColor Cyan
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-
-
