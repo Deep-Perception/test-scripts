@@ -78,17 +78,9 @@ Write-Host "Updating WSL to latest version..." -ForegroundColor Green
 wsl --update
 Write-Host "[OK] WSL updated" -ForegroundColor Green
 
-Write-Host "Shutting down WSL..."
-wsl --shutdown
-Stop-Service LxssManager
-Start-Sleep -Seconds 15
-Start-Service LxssManager
-Start-Sleep -Seconds 15
-
 # Set WSL 2 as default
 Write-Host "Setting WSL 2 as default version..." -ForegroundColor Green
 wsl --set-default-version 2
-Start-Sleep -Seconds 15
 
 # Check if any WSL distro is installed
 $distros = wsl -l -q 2>$null
@@ -188,8 +180,3 @@ Write-Host "  podman run quay.io/podman/hello" -ForegroundColor Gray
 Write-Host ""
 Write-Host "Press any key to exit..." -ForegroundColor Cyan
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-
-
-
-
-
