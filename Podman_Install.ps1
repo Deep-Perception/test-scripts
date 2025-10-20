@@ -75,8 +75,37 @@ Write-Host "Step 2: Configuring WSL..." -ForegroundColor Yellow
 
 # Update WSL to latest version
 Write-Host "Updating WSL to latest version..." -ForegroundColor Green
-wsl --update
-Write-Host "[OK] WSL updated" -ForegroundColor Green
+$wslUpdateOutput = wsl --update 2>&1 | Out-String
+Write-Host $wslUpdateOutput
+
+# Check if an update was actually applied
+$updateApplied = $false
+if ($wslUpdateOutput -match "Installing|Downloading|has been installed|Update successful") {
+    $updateApplied = $true
+}
+elseif ($wslUpdateOutput -match "No updates are available|already have the most recent version|up to date") {
+    $updateApplied = $false
+    Write-Host "[OK] WSL is already up to date" -ForegroundColor Green
+}
+else {
+    # If we can't determine, be safe and assume an update might have occurred
+    Write-Host "Unable to determine if WSL was updated. Checking version..." -ForegroundColor Yellow
+    # Could add additional version check logic here if needed
+}
+
+if ($updateApplied) {
+    Write-Host ""
+    Write-Host "============================================" -ForegroundColor Red
+    Write-Host "SYSTEM REBOOT REQUIRED" -ForegroundColor Red
+    Write-Host "============================================" -ForegroundColor Red
+    Write-Host "WSL has been updated to a newer version." -ForegroundColor Yellow
+    Write-Host "Please restart your computer and run this script again." -ForegroundColor Yellow
+    Write-Host ""
+    Read-Host "Press Enter to exit"
+    exit
+}
+
+Write-Host ""
 
 # Set WSL 2 as default
 Write-Host "Setting WSL 2 as default version..." -ForegroundColor Green
@@ -180,3 +209,4 @@ Write-Host "  podman run quay.io/podman/hello" -ForegroundColor Gray
 Write-Host ""
 Write-Host "Press any key to exit..." -ForegroundColor Cyan
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
