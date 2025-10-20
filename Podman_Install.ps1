@@ -121,6 +121,11 @@ Write-Host ""
 # Step 4: Configure environment
 Write-Host "Step 4: Configuring Podman environment..." -ForegroundColor Yellow
 
+# Update WSL to latest version
+Write-Host "Updating WSL to latest version..." -ForegroundColor Green
+wsl --update
+Write-Host "[OK] WSL updated" -ForegroundColor Green
+
 # Reset Podman machine
 Write-Host "Resetting Podman machine..." -ForegroundColor Green
 & "C:\Program Files\RedHat\Podman\podman.exe" machine reset -f 2>$null
@@ -175,3 +180,4 @@ Write-Host "  podman run quay.io/podman/hello" -ForegroundColor Gray
 Write-Host ""
 Write-Host "Press any key to exit..." -ForegroundColor Cyan
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
